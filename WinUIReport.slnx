@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
+    <Deploy />
+  </Project>
+</Solution>
