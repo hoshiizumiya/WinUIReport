@@ -1,9 +1,12 @@
-namespace winui3xbindwithcontrol
+﻿namespace winui3xbindwithcontrol
 {
     [default_interface]
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
         Int32 MyProperty;
+
+        // if you comment it, it will fail to compile
+        // Microsoft.UI.Xaml.Controls.ComboBox TwoWaySource{ get; };
     }
 }

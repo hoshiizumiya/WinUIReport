@@ -9,5 +9,29 @@
     Title="winui3xbindwithcontrol"
     mc:Ignorable="d">
 
-    <Grid />
+    <StackPanel>
+        <!--  No IDL declaration for either source: compare OneWay with TwoWay.  -->
+        <ComboBox
+            x:Name="OneWaySource"
+            Header="OneWay source"
+            SelectedIndex="0">
+            <ComboBoxItem Content="A" />
+            <ComboBoxItem Content="B" />
+        </ComboBox>
+        <ComboBox Header="OneWay target" SelectedIndex="{x:Bind OneWaySource.SelectedIndex, Mode=OneWay}">
+            <ComboBoxItem Content="A" />
+            <ComboBoxItem Content="B" />
+        </ComboBox>
+        <ComboBox
+            x:Name="TwoWaySource"
+            Header="TwoWay source"
+            SelectedIndex="0">
+            <ComboBoxItem Content="A" />
+            <ComboBoxItem Content="B" />
+        </ComboBox>
+        <ComboBox Header="TwoWay target" SelectedIndex="{x:Bind TwoWaySource.SelectedIndex, Mode=TwoWay}">
+            <ComboBoxItem Content="A" />
+            <ComboBoxItem Content="B" />
+        </ComboBox>
+    </StackPanel>
 </Window>
