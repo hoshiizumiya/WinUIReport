@@ -9,23 +9,23 @@ namespace winrt::ItemContainerGeneratorLifetimeRepro::implementation
         MainWindow();
 
         void CreateGenerator_Click(
-            Microsoft::UI::Xaml::IInspectable const& sender,
+            Windows::Foundation::IInspectable const& sender,
             Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
         void DetachGenerator_Click(
-            Microsoft::UI::Xaml::IInspectable const& sender,
+            Windows::Foundation::IInspectable const& sender,
             Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
         void ProbeDetached_Click(
-            Microsoft::UI::Xaml::IInspectable const& sender,
+            Windows::Foundation::IInspectable const& sender,
             Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
         void RemoveAll_Click(
-            Microsoft::UI::Xaml::IInspectable const& sender,
+            Windows::Foundation::IInspectable const& sender,
             Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
         void TriggerCrash_Click(
-            Microsoft::UI::Xaml::IInspectable const& sender,
+            Windows::Foundation::IInspectable const& sender,
             Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
     private:

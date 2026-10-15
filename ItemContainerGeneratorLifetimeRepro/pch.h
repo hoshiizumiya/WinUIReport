@@ -7,6 +7,7 @@
 
 #undef GetCurrentTime
 
+#include <cstdio>
 #include <string>
 #include <string_view>
 
