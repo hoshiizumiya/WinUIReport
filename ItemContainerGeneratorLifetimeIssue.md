@@ -1,18 +1,20 @@
-# ItemContainerGenerator has an incomplete detached lifecycle after its ItemsControl host stops using it
+# ItemContainerGenerator can outlive its ItemsControl host and enter an invalid detached state
 
 ## Summary
 
-`ItemContainerGenerator` is already a public API, but its implementation assumes a host-bound lifetime that is not fully represented in the public contract.
+`ItemContainerGenerator` is already a public API. Application code can retain the instance returned by `ItemsControl.ItemContainerGenerator` after the owning `ItemsControl` stops using that generator.
 
-A caller can retain an `ItemContainerGenerator` reference after its owning `ItemsControl` stops using that generator. The current detach path only clears the generator's weak reference to the host, while other internal state remains. Public methods then behave inconsistently: some continue to use stale generator state, while other methods require the host and can partially mutate the generator before returning an error.
+The current detach path does not establish a complete detached-state invariant. `ItemContainerGenerator::DetachHost()` only clears `m_wrHost`, while the public object and other internal state can remain alive. Public methods then make inconsistent assumptions about whether the host and item map still exist.
 
-This issue exists with the current sealed `ItemContainerGenerator`; derivation is not required to reproduce it.
+A concrete sequence can leave the generator partially mutated and make a later public API call dereference a null internal item map.
 
-## Current implementation
+This is reproducible with the current sealed `ItemContainerGenerator`; making the class derivable is not required.
 
-For the old-style items-panel path, `ItemsControl::InitializeItemContainerGenerator()` creates and owns an `ItemContainerGenerator`.
+## Relevant implementation
 
-When `ItemsControl` transitions to a modern panel, the existing code removes the `ItemsChanged` handler, calls `ItemContainerGenerator::DetachHost()`, and clears the control's generator reference:
+For the legacy items-panel path, `ItemsControl::InitializeItemContainerGenerator()` creates an `ItemContainerGenerator` hosted by the `ItemsControl`.
+
+When `ItemsControl` switches away from that path, it removes the event handler, detaches the generator, and releases its own reference:
 
 ```cpp
 if (m_tpGenerator)
@@ -24,7 +26,7 @@ if (m_tpGenerator)
 }
 ```
 
-However, `DetachHost()` currently only does:
+`DetachHost()` itself only resets the weak host reference:
 
 ```cpp
 HRESULT DetachHost()
@@ -34,92 +36,94 @@ HRESULT DetachHost()
 }
 ```
 
-The `ItemContainerGenerator` can still be alive because application code may hold a strong WinRT reference to it. At that point the object is publicly callable, but its host is gone while its item map, recyclable-container state, view state, and other internal state are not transitioned to a defined detached state.
+An application can still hold a strong WinRT reference to this same public object.
 
-One concrete failure sequence is:
+The problematic failure sequence is then:
 
-1. A valid generator is created while the `ItemsControl` uses an old-style panel.
-2. Application code keeps a strong reference to the generator.
-3. The `ItemsControl` switches to a modern panel and detaches the generator.
-4. `RemoveAll()` is called on the retained generator.
-5. `RemoveAllImpl()` clears the existing item map, then calls host-dependent grouping preparation.
-6. Grouping preparation fails because `m_wrHost` no longer resolves.
-7. The method returns an error after `m_pItemMap` has already been cleared.
-8. A later call such as `GeneratorPositionFromIndex(0)` dereferences the now-null item map.
+1. `RemoveAll()` enters `RemoveAllImpl()` on the retained detached generator.
+2. For the root generator, the recyclable-container collection is still present, so the initial cleanup can proceed.
+3. `ClearBlocks(...)` clears the existing item-map structure and sets `m_pItemMap` to null.
+4. `RemoveAllImpl()` then calls host-dependent grouping/view preparation.
+5. That path requires `m_wrHost` to resolve to an `IGeneratorHost` and fails because the generator was detached.
+6. `RemoveAll()` returns an error, but the object has already lost its item map.
+7. A later `GeneratorPositionFromIndex(0)` assumes `m_pItemMap` is valid and can dereference the null pointer.
 
-This means the problem is not only that a detached generator can return an error; a public call can leave the generator in a more invalid state and make a later public call crash.
+The important point is therefore not simply that an operation fails after detach. A public operation can fail **after partially invalidating the generator**, leaving a retained public WinRT object in a state where another public method can crash the process.
 
 ## Reproduction
 
-A C++/WinRT repro is available in:
+A minimal C++/WinRT repro is prepared here:
 
 `ItemContainerGeneratorLifetimeRepro/`
 
-The sample intentionally does not depend on any unsealing change.
+Repository branch:
 
-Steps:
+`hoshiizumiya/WinUIReport`, branch `item-container-generator-lifetime-repro`
+
+The sample does not depend on any `ItemContainerGenerator` unsealing change.
+
+### Steps
 
 1. Launch the sample.
 2. Click **1. Create old-style generator**.
-   - The sample creates a `ListView` with `VirtualizingStackPanel`.
-   - It obtains and stores `ListView.ItemContainerGenerator`.
+   - A `ListView` is created with `VirtualizingStackPanel`.
+   - The sample obtains `ListView.ItemContainerGenerator` and keeps a strong reference.
 3. Click **2. Switch to modern panel**.
-   - The sample changes the items panel to `ItemsStackPanel`.
-   - WinUI transitions away from the old `ItemContainerGenerator` and calls its internal detach path.
+   - The sample changes the panel to `ItemsStackPanel`.
+   - `ItemsControl` stops using the old generator and invokes its internal detach path.
    - The sample intentionally keeps the old generator alive.
 4. Click **3. Probe detached generator**.
    - `GeneratorPositionFromIndex(0)` is called before further mutation.
-   - This demonstrates that the retained object is still callable after detach.
+   - This shows that the retained public object is still callable after host detachment.
 5. Click **4. Call RemoveAll**.
-   - The expected current behavior is an exception/HRESULT because host-dependent initialization can no longer complete.
+   - The call reaches host-dependent work after clearing the item map and returns an error because the host is gone.
 6. Click **5. Call GeneratorPositionFromIndex again**.
-   - On the current implementation this can dereference the item map that `RemoveAll()` cleared before failing and terminate the process.
-
-The final step is intentionally separated because it may crash the repro process.
+   - This is intentionally separated as the crash step.
+   - The current implementation can dereference the null `m_pItemMap` left by the failed `RemoveAll()` call.
 
 ## Expected behavior
 
-A public `ItemContainerGenerator` should have a defined lifetime after its host stops using it.
+A public `ItemContainerGenerator` should have a defined contract after its host stops using it.
 
-At minimum, one of the following contracts should be implemented consistently:
+At minimum, host detachment and all host-dependent public APIs should follow one consistent invariant. For example:
 
-- the object enters a well-defined detached state and all host-dependent public APIs fail without mutating state; or
-- detach fully resets/reinitializes the object so that all remaining public APIs have defined detached semantics.
+- detached generators reject host-dependent operations **before mutating internal state**; or
+- detach fully transitions all dependent state to a valid detached representation whose public methods have defined semantics.
 
-A public method should never partially invalidate the object and make a later public method dereference null internal state.
+A public method should not fail after leaving the object in a state where a later public method can dereference null internal state.
 
 ## Actual behavior
 
-The current object has an implicit host-bound lifetime but no complete detached-state contract.
+The lifetime is implicitly host-bound, but the public WinRT object can outlive the host relationship.
 
-`DetachHost()` clears only the host weak reference. Other state remains, and public methods make different assumptions about whether the host and item map are still valid.
+`DetachHost()` clears only `m_wrHost`. Other generator state remains, and public methods do not consistently validate the detached state before using or mutating it.
 
-`RemoveAll()` is especially problematic because it can clear the map before reaching a host-dependent operation that fails. This leaves the retained public object in a state where `GeneratorPositionFromIndex()` can dereference a null map.
+In particular, `RemoveAll()` can clear the item map and only afterward discover that the required host is gone. `GeneratorPositionFromIndex()` can subsequently dereference that null map.
 
 ## Why this matters
 
-This is an existing public API lifetime issue, not only a derivation issue.
+This is an existing public API lifetime issue, independent of derivation.
 
-Application code is allowed to retain the object returned by `ItemsControl.ItemContainerGenerator`. The `ItemsControl` can later stop using that generator while the application still owns the WinRT reference.
+Application code is allowed to retain the object returned by `ItemsControl.ItemContainerGenerator`. `ItemsControl` can later stop using that generator while the application still owns the WinRT reference. The retained public object therefore needs a safe and defined post-detach contract.
 
-The public API therefore needs a valid contract for the generator after detachment even if `ItemContainerGenerator` remains sealed.
-
-This also affects any future work to make the class derivable: derivation would make the missing detached lifecycle visible at construction time as well, but the lifecycle gap already exists today.
+This also matters for any future attempt to make `ItemContainerGenerator` derivable. Direct construction would expose another form of unattached generator, but fixing only that construction path would not solve the existing detach lifecycle problem.
 
 ## Possible direction
 
-The implementation likely needs an explicit attached/detached invariant rather than individual null checks.
+The implementation likely needs an explicit attached/detached invariant rather than isolated null checks. Areas that may need to participate in the transition include:
 
-Possible pieces include:
+- host weak reference;
+- item map;
+- current view and observable source state;
+- event subscriptions;
+- recyclable/shared recyclable container collections;
+- grouping state and child-generator hierarchy;
+- active generation state.
 
-- define a detached state for `ItemContainerGenerator`;
-- make attach/detach transitions complete and transactional;
-- ensure all public methods validate the required state before mutating internal structures;
-- fully clean up or reinitialize item-map, view, event-subscription, recycling, grouping, and generation state during detach;
-- consider exposing a read-only attachment/lifecycle state if callers need to know whether host-dependent operations are valid.
+Host-dependent public methods should validate the required lifecycle state before making irreversible mutations.
 
-If derivation is supported later, `ItemsControl` can use the same lifecycle machinery to attach a derived generator instead of introducing a separate initialization path.
+If custom/derived generators are supported in the future, the same lifecycle machinery could also define how a generator is attached to and detached from an `ItemsControl`, instead of creating a separate partially initialized state.
 
 ## Related
 
-This was noticed while reviewing the work to make `ItemContainerGenerator` derivable. The constructor path exposed a null-state problem, but investigating it showed that the existing public object already has an incomplete lifetime after host detachment.
+This was found while investigating the work to make `ItemContainerGenerator` derivable. The new activation path exposed an unattached-construction problem, but source inspection showed that the current sealed public object already has an incomplete detached lifecycle.
