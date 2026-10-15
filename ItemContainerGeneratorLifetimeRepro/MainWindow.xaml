@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="ItemContainerGeneratorLifetimeRepro.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ItemContainerGenerator lifetime repro"
+    mc:Ignorable="d">
+
+    <Grid Padding="24" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="240" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            FontSize="20"
+            FontWeight="SemiBold"
+            Text="ItemContainerGenerator detached-lifetime repro" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,12,0,0"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button Content="1. Create old-style generator" Click="CreateGenerator_Click" />
+            <Button Content="2. Switch to modern panel" Click="DetachGenerator_Click" />
+            <Button Content="3. Probe detached generator" Click="ProbeDetached_Click" />
+            <Button Content="4. Call RemoveAll" Click="RemoveAll_Click" />
+            <Button Content="5. Call GeneratorPositionFromIndex again" Click="TriggerCrash_Click" />
+        </StackPanel>
+
+        <Border
+            x:Name="Host"
+            Grid.Row="2"
+            Margin="0,12,0,0"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="8" />
+
+        <TextBox
+            x:Name="Log"
+            Grid.Row="3"
+            Margin="0,12,0,0"
+            AcceptsReturn="True"
+            FontFamily="Consolas"
+            IsReadOnly="True"
+            TextWrapping="Wrap" />
+    </Grid>
+</Window>
