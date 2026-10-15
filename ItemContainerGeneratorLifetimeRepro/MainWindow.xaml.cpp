@@ -24,7 +24,7 @@ namespace winrt::ItemContainerGeneratorLifetimeRepro::implementation
         static constexpr wchar_t markup[] =
             LR"(<ItemsPanelTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><VirtualizingStackPanel /></ItemsPanelTemplate>)";
 
-        return XamlReader::Load(markup).as<ItemsPanelTemplate>();
+        return XamlReader::Load(hstring{ markup }).as<ItemsPanelTemplate>();
     }
 
     ItemsPanelTemplate MainWindow::CreateModernItemsPanelTemplate()
@@ -32,7 +32,7 @@ namespace winrt::ItemContainerGeneratorLifetimeRepro::implementation
         static constexpr wchar_t markup[] =
             LR"(<ItemsPanelTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><ItemsStackPanel /></ItemsPanelTemplate>)";
 
-        return XamlReader::Load(markup).as<ItemsPanelTemplate>();
+        return XamlReader::Load(hstring{ markup }).as<ItemsPanelTemplate>();
     }
 
     void MainWindow::AppendLog(std::wstring_view line)
