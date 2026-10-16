@@ -4,6 +4,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="ItemCollectionOwnerLifetimeRepro/ItemCollectionOwnerLifetimeRepro.vcxproj" Id="a3a0e59b-ec49-4ec6-a72e-c4c7a085b5a7" />
   <Project Path="ItemContainerGeneratorLifetimeRepro/ItemContainerGeneratorLifetimeRepro.vcxproj" Id="437bf58a-aa23-4206-9183-baa5fa8b50e7" />
   <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
     <Deploy />
