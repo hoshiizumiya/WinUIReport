@@ -1,0 +1,14 @@
+<Page
+    x:Class="TemplateRootCastRepro.ReproPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TemplateRootCastRepro">
+    <Page.Resources>
+        <DataTemplate x:Key="RowTemplate" x:DataType="x:String">
+            <local:ReproCard Content="{x:Bind Mode=OneTime}" />
+        </DataTemplate>
+    </Page.Resources>
+    <ItemsControl Margin="24" ItemTemplate="{StaticResource RowTemplate}">
+        <x:String>One item</x:String>
+    </ItemsControl>
+</Page>

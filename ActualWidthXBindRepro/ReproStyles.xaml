@@ -1,0 +1,19 @@
+<ResourceDictionary
+    x:Class="ActualWidthXBindRepro.ReproStyles"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="WidthTemplate" TargetType="ContentControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <StackPanel Spacing="8">
+                        <Border x:Name="ContentHost" Width="{TemplateBinding Width}" Height="24" Background="SteelBlue"
+                                SizeChanged="OnSourceSizeChanged" />
+                        <TextBlock Text="Caption under the blue bar"
+                                   MaxWidth="{x:Bind ContentHost.ActualWidth, Mode=OneWay}" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

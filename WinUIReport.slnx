@@ -12,4 +12,10 @@
   <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
     <Deploy />
   </Project>
+  <Project Path="ActualWidthXBindRepro/ActualWidthXBindRepro.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="TemplateRootCastRepro/TemplateRootCastRepro.csproj">
+    <Platform Project="x64" />
+  </Project>
 </Solution>
