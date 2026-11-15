@@ -1,0 +1,10 @@
+namespace Array2ItemsSource
+{
+	[default_interface]
+	runtimeclass MainWindow : Microsoft.UI.Xaml.Window
+	{
+		MainWindow();
+
+		String[] Names{ get; };
+	}
+}
