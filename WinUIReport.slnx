@@ -4,18 +4,24 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="ActualWidthXBindRepro/ActualWidthXBindRepro.csproj">
+    <Platform Project="x64" />
+  </Project>
   <Project Path="Array2ItemsSource/Array2ItemsSource.vcxproj" Id="32a1b7e2-511b-42c4-9329-4631932501c7">
     <Deploy />
   </Project>
   <Project Path="ItemCollectionOwnerLifetimeRepro/ItemCollectionOwnerLifetimeRepro.vcxproj" Id="a3a0e59b-ec49-4ec6-a72e-c4c7a085b5a7" />
   <Project Path="ItemContainerGeneratorLifetimeRepro/ItemContainerGeneratorLifetimeRepro.vcxproj" Id="437bf58a-aa23-4206-9183-baa5fa8b50e7" />
-  <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
+  <Project Path="ResourceDictionaries/ResourceDictionaries.csproj" Id="78353748-90e6-4bd8-8f15-d785b726ca92">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
     <Deploy />
-  </Project>
-  <Project Path="ActualWidthXBindRepro/ActualWidthXBindRepro.csproj">
-    <Platform Project="x64" />
   </Project>
   <Project Path="TemplateRootCastRepro/TemplateRootCastRepro.csproj">
     <Platform Project="x64" />
+  </Project>
+  <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
+    <Deploy />
   </Project>
 </Solution>

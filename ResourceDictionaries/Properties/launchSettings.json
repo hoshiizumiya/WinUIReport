@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ResourceDictionaries (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "ResourceDictionaries (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
