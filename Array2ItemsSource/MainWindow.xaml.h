@@ -8,7 +8,7 @@ namespace winrt::Array2ItemsSource::implementation
     {
 		MainWindow() = default;
 
-        winrt::com_array<winrt::hstring> Names();
+        winrt::com_array<int32_t> Names();
     };
 }
 

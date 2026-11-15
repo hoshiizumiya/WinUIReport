@@ -12,12 +12,12 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Array2ItemsSource::implementation
 {
-	winrt::com_array<winrt::hstring> MainWindow::Names()
+	winrt::com_array<int32_t> MainWindow::Names()
 	{
-		winrt::com_array<winrt::hstring> values(2);
+		winrt::com_array<int32_t> values(2);
 
-		values[0] = L"Item 1";
-		values[1] = L"Item 2";
+		values[0] = 1;
+		values[1] = 2;
 
 		return values;
 	}

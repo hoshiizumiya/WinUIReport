@@ -5,6 +5,6 @@ namespace Array2ItemsSource
 	{
 		MainWindow();
 
-		String[] Names{ get; };
+	    Int32[] Names{ get; };
 	}
 }
