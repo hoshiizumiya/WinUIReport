@@ -12,6 +12,12 @@
   </Project>
   <Project Path="ItemCollectionOwnerLifetimeRepro/ItemCollectionOwnerLifetimeRepro.vcxproj" Id="a3a0e59b-ec49-4ec6-a72e-c4c7a085b5a7" />
   <Project Path="ItemContainerGeneratorLifetimeRepro/ItemContainerGeneratorLifetimeRepro.vcxproj" Id="437bf58a-aa23-4206-9183-baa5fa8b50e7" />
+  <Project Path="MenuFlyoutItem.KeyboardAccelerators/MenuFlyoutItem.KeyboardAccelerators.csproj" Id="de9d353f-8068-4bac-8c7e-e3639ae5d577">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
   <Project Path="ResourceDictionaries/ResourceDictionaries.csproj" Id="78353748-90e6-4bd8-8f15-d785b726ca92">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />

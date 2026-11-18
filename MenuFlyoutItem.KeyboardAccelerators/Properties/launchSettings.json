@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MenuFlyoutItem.KeyboardAccelerators (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "MenuFlyoutItem.KeyboardAccelerators (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
