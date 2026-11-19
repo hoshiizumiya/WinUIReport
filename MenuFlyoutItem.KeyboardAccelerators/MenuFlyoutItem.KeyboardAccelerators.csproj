@@ -56,6 +56,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="*" />
+    <PackageReference Include="WinUIEssential.WinUI3" Version="1.9.5" />
   </ItemGroup>
 
   <!--
