@@ -1,3 +1,4 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System.Diagnostics;
@@ -20,9 +21,9 @@ namespace MenuFlyoutItem.KeyboardAccelerators
             // TODO: Add your initialization logic here.
         }
 
-        private void Test_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        private void TestButton1Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine($">>>>>>>>>>>>>>>>>>>>>>>>>>>>> invoked Hash = {sender.GetHashCode()}, invoke time = {DateTime.Now:HH:mm:ss.fff}");
+            TestButton4TeachingTip.IsOpen = true;
         }
     }
 }

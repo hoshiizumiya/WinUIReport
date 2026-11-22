@@ -24,16 +24,6 @@
                 <ImageIconSource ImageSource="Assets/AppIcon.ico" />
             </TitleBar.IconSource>
         </TitleBar>
-        <Button
-            Grid.Row="1"
-            Click="ShowDialog_Click"
-            Content="Show Dialog"
-            Loaded="Button_Loaded" />
-        <!--
-            The Frame hosts pages for your application content. Add your UI to
-            MainPage.xaml rather than here so you can use Page features such as
-            navigation events and the Loaded lifecycle.
-        -->
         <Frame x:Name="RootFrame" Grid.Row="2" />
     </Grid>
 </Window>

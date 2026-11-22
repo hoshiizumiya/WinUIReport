@@ -1,7 +1,8 @@
 {
   "profiles": {
     "MenuFlyoutItem.KeyboardAccelerators (Package)": {
-      "commandName": "MsixPackage"
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
     },
     "MenuFlyoutItem.KeyboardAccelerators (Unpackaged)": {
       "commandName": "Project"
