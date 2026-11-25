@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "winuiessential.svg (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "winuiessential.svg (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

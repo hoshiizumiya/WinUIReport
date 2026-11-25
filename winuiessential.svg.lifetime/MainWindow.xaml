@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="winuiessential_svg_lifetime.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:winuiessential_svg_lifetime"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="winuiessential.svg.lifetime"
+    mc:Ignorable="d">
+
+    <StackPanel Spacing="12">
+        <Button Click="Reproduce_Click" Content="Reproduce" />
+
+        <Image
+            x:Name="Preview"
+            Width="200"
+            Height="200"
+            ImageOpened="Preview_ImageOpened" />
+    </StackPanel>
+</Window>

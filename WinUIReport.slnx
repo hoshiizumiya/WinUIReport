@@ -18,12 +18,6 @@
     <Platform Solution="*|x86" Project="x86" />
     <Deploy />
   </Project>
-  <Project Path="winuiessential.teachingtip/winuiessential.teachingtip.csproj" Id="314435F7-0683-40C6-A7D2-FECAE9334EFC">
-    <Platform Solution="*|ARM64" Project="ARM64" />
-    <Platform Solution="*|x64" Project="x64" />
-    <Platform Solution="*|x86" Project="x86" />
-    <Deploy />
-  </Project>
   <Project Path="ResourceDictionaries/ResourceDictionaries.csproj" Id="78353748-90e6-4bd8-8f15-d785b726ca92">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
@@ -34,6 +28,21 @@
     <Platform Project="x64" />
   </Project>
   <Project Path="winui3xbindwithcontrol/winui3xbindwithcontrol.vcxproj" Id="992c1e13-0c59-4800-bad4-24479b18904d">
+    <Deploy />
+  </Project>
+  <Project Path="winuiessential.svg.lifetime/winuiessential.svg.lifetime.vcxproj" Id="a6ee5e9a-b517-4b0d-a8b9-cbcb7c0980d9">
+    <Deploy />
+  </Project>
+  <Project Path="winuiessential.svg/winuiessential.svg.csproj" Id="b1326846-d1d5-4688-a057-8ff412eff56d">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
+  <Project Path="winuiessential.teachingtip/winuiessential.teachingtip.csproj" Id="314435f7-0683-40c6-a7d2-fecae9334efc">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
     <Deploy />
   </Project>
 </Solution>
