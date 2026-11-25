@@ -13,29 +13,34 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::winuiessential_svg_lifetime::implementation
 {
-
-	void MainWindow::Reproduce_Click(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const&)
+	void MainWindow::Create_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
 	{
-		winrt::WinUI3Package::Svg::SvgImageSource source;
+		{
+			winrt::WinUI3Package::Svg::SvgImageSource source;
 
-		source.RasterizePixelWidth(200);
-		source.RasterizePixelHeight(200);
+			// 只保存弱引用，不增加对象的强引用计数
+			m_weakSource = winrt::make_weak(source);
 
-		Preview().Source(source);
+			// 启动 HTTP 异步加载
+			source.UriSource(winrt::Windows::Foundation::Uri{ L"http://127.0.0.1:8765/svg" });
+			// source.UriSource(winrt::Windows::Foundation::Uri{ L"http://127.0.0.1:8765/release" });
 
-		source.StringSource(LR"(
-        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-            <rect width="200" height="200" fill="red"/>
-        </svg>
-    )");
+		} // source 在此析构，释放外部持有的强引用
 
-		// 上一次异步操作尚未完成，立即清空 Source。
-		source.StringSource(L"");
-		Preview().Source(source);
+		ResultText().Text(L"External reference released.");
 	}
 
-	void MainWindow::Preview_ImageOpened(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const&)
+	void MainWindow::Check_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
 	{
-		OutputDebugStringW(L"ImageOpened: stale SVG was rendered.\n");
+		if (auto source = m_weakSource.get())
+		{
+			ResultText().Text(L"SvgImageSource is still alive.");
+			OutputDebugStringW(L"SvgImageSource is still alive.\n");
+		}
+		else
+		{
+			ResultText().Text(L"SvgImageSource has been destroyed.");
+			OutputDebugStringW(L"SvgImageSource has been destroyed.\n");
+		}
 	}
 }

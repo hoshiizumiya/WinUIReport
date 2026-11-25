@@ -1,26 +1,27 @@
 #pragma once
 
 #include "MainWindow.g.h"
+#include <winrt/WinUI3Package.Svg.h>
 
 using namespace winrt;
 
 namespace winrt::winuiessential_svg_lifetime::implementation
 {
-    struct MainWindow : MainWindowT<MainWindow>
-    {
-        MainWindow()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
-        void Reproduce_Click(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const&);
-        void Preview_ImageOpened(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const&);
-    };
+	struct MainWindow : MainWindowT<MainWindow>
+	{
+	public:
+		void Create_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e);
+
+		void Check_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e);
+
+	private:
+		winrt::weak_ref<winrt::WinUI3Package::Svg::SvgImageSource> m_weakSource;
+	};
 }
 
 namespace winrt::winuiessential_svg_lifetime::factory_implementation
 {
-    struct MainWindow : MainWindowT<MainWindow, implementation::MainWindow>
-    {
-    };
+	struct MainWindow : MainWindowT<MainWindow, implementation::MainWindow>
+	{
+	};
 }

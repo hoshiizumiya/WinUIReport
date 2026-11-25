@@ -9,13 +9,10 @@
     Title="winuiessential.svg.lifetime"
     mc:Ignorable="d">
 
-    <StackPanel Spacing="12">
-        <Button Click="Reproduce_Click" Content="Reproduce" />
+    <StackPanel Padding="20" Spacing="12">
+        <Button Click="Create_Click" Content="Create and Release" />
+        <Button Click="Check_Click" Content="Check Lifetime" />
 
-        <Image
-            x:Name="Preview"
-            Width="200"
-            Height="200"
-            ImageOpened="Preview_ImageOpened" />
+        <TextBlock x:Name="ResultText" />
     </StackPanel>
 </Window>
