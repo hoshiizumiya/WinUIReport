@@ -18,6 +18,12 @@
     <Platform Solution="*|x86" Project="x86" />
     <Deploy />
   </Project>
+  <Project Path="winuiessential.teachingtip/winuiessential.teachingtip.csproj" Id="314435F7-0683-40C6-A7D2-FECAE9334EFC">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
   <Project Path="ResourceDictionaries/ResourceDictionaries.csproj" Id="78353748-90e6-4bd8-8f15-d785b726ca92">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
